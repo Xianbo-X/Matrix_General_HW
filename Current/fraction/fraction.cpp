@@ -39,6 +39,11 @@ fraction::fraction(const fraction& other) {
   simp();
 }
 
+void fraction::operator=(const fraction& other) {
+  this->_denominator = other._denominator;
+  this->_numerator = other._numerator;
+}
+
 fraction fraction::operator+(const fraction& other) const {
   // exception either denominator is 0, return 0/0;
   if (!this->_denominator && !other._denominator) return fraction{0, 0};
@@ -100,12 +105,23 @@ fraction fraction::operator/(const fraction& other) const
   return *this * reciprocal;
 }
 
-void fraction::operator+=(const fraction& other) {  //*this = (*this + other);
-  *this = this->operator+(other);
+void fraction::operator+=(const fraction& other) {
+  fraction temp = *this + other;
+  *this = temp;
+  //*this = this->operator+(other);
 }
-//void fraction::operator-=(const fraction& other) { *this = (*this - other); }
-//void fraction::operator*=(const fraction& other) { *this = (*this * other); }
-//void fraction::operator/=(const fraction& other) { *this = (*this / other); }
+void fraction::operator-=(const fraction& other) {
+  fraction temp = *this - other;
+  *this = temp;
+}
+void fraction::operator*=(const fraction& other) {
+  fraction temp = *this * other;
+  *this = temp;
+}
+void fraction::operator/=(const fraction& other) {
+  fraction temp = *this / other;
+  *this = temp;
+}
 
 bool fraction::operator==(const fraction& other) const {
   // exception both are illegal;
