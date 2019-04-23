@@ -1,8 +1,8 @@
 #ifndef LIST
 #define LIST
 
-#include <string>
 #include <iostream>
+#include <string>
 
 class list {
  public:
@@ -15,8 +15,11 @@ class list {
     node(data_type data = 0, node* next = NULL, node* prev = NULL)
         : data(data), next(next), prev(prev){};
   };
+
   typedef node listNode;
+
   typedef node* listPointer;
+
   typedef unsigned int size_type;
 
  private:
@@ -68,7 +71,7 @@ class list {
 
   // Modifiers
   void assign(const list&);
-  void assign(const data_type datas[], int length);
+  void assign(const data_type data[], int length);
   void push_front(const data_type&);
   void push_back(const data_type&);
   void pop_front(void);
@@ -98,4 +101,3 @@ class list {
 };
 
 #endif
-
