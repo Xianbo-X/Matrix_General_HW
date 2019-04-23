@@ -3,7 +3,9 @@
 #include <iostream>
 
 int Gcd(const int& a, const int& b) { return (b ? Gcd(b, a % b) : a); }
-
+long long Gcd(const long long& a, const long long& b) {
+  return (b ? Gcd(b, a % b) : a);
+}
 int fraction::gcd(const int& a, const int& b) const {
   //  return (b ? gcd(b, a % b) : a);
   return Gcd(a, b);
@@ -12,7 +14,10 @@ int lcm(const int& a, const int& b) {
   int gcd = Gcd(a, b);
   return (a * b / gcd);
 }
-
+long long lcm(const long long& a, const long long& b) {
+  long long gcd = Gcd(a, b);
+  return (a * b / gcd);
+}
 void fraction::simp() {
   // exception: An illegal fraction expression.
   if (_denominator == 0) {
@@ -21,7 +26,10 @@ void fraction::simp() {
   }
 
   // The regular simplification process.
-  int sign = this->_numerator * this->_denominator;
+  int sign=1;
+  if (((this->_numerator < 0) && (this->_denominator > 0)) ||
+      ((this->_numerator > 0) && (this->_denominator < 0)))
+    sign = -1;
   if (sign < 0) {
     this->_numerator = -abs(this->_numerator);
     this->_denominator = abs(this->_denominator);
@@ -59,10 +67,22 @@ fraction fraction::operator+(const fraction& other) const {
   // regular addition for fractions.
   // 0 can be processed as well, don't need to special operation.
   fraction temp{0, 0};
-  temp._denominator = lcm(this->_denominator, other._denominator);
-  temp._numerator =
-      this->_numerator * (temp._denominator / this->_denominator) +
-      other._numerator * (temp._denominator / other._denominator);
+  /*
+   *temp._denominator = lcm(this->_denominator, other._denominator);
+   *temp._numerator =
+   *     this->_numerator * (temp._denominator / this->_denominator) +
+   *      other._numerator * (temp._denominator / other._denominator);
+   */
+  // Long long buffer version
+  long long denominator =
+      lcm((long long)this->_denominator, (long long)(other._denominator));
+  long long numerator = this->_numerator * (denominator / this->_denominator) +
+                        other._numerator * (denominator / other._denominator);
+  long long factor = Gcd(numerator, denominator);
+  numerator /= factor;
+  denominator /= factor;
+  temp._denominator = denominator;
+  temp._numerator = numerator;
   temp.simp();
   return temp;
 }
@@ -116,16 +136,18 @@ fraction fraction::operator/(const fraction& other) const
 void fraction::operator+=(const fraction& other) {
   fraction temp = *this + other;
   *this = temp;
-  //*this = this->operator+(other);
 }
+
 void fraction::operator-=(const fraction& other) {
   fraction temp = *this - other;
   *this = temp;
 }
+
 void fraction::operator*=(const fraction& other) {
   fraction temp = *this * other;
   *this = temp;
 }
+
 void fraction::operator/=(const fraction& other) {
   fraction temp = *this / other;
   *this = temp;
