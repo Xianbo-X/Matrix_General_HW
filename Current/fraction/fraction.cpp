@@ -21,6 +21,14 @@ void fraction::simp() {
   }
 
   // The regular simplification process.
+  int sign = this->_numerator * this->_denominator;
+  if (sign < 0) {
+    this->_numerator = -abs(this->_numerator);
+    this->_denominator = abs(this->_denominator);
+  } else {
+    this->_numerator = abs(this->_numerator);
+    this->_denominator = abs(this->_denominator);
+  }
   int factor = gcd(abs(this->_numerator), abs(this->_denominator));
   this->_denominator /= factor;
   this->_numerator /= factor;  //分数化简
@@ -54,7 +62,7 @@ fraction fraction::operator+(const fraction& other) const {
   temp._denominator = lcm(this->_denominator, other._denominator);
   temp._numerator =
       this->_numerator * (temp._denominator / this->_denominator) +
-      other._denominator * (temp._denominator / other._denominator);
+      other._numerator * (temp._denominator / other._denominator);
   temp.simp();
   return temp;
 }
