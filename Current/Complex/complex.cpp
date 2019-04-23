@@ -1,7 +1,7 @@
 #include "complex.h"
 #include <iomanip>
+#include <sstream>
 #include <string>
-
 Complex conjugate(const Complex& theComplex) {
   Complex temp;
   temp.setReal(theComplex.getReal);
@@ -22,11 +22,16 @@ const double Complex::getReal(void) const { return real; }
 const double Complex::getImaginary(void) const { return imag; }
 void Complex::setReal(double re) { real = re; }
 void Complex::setImaginary(double im) { imag = im; }
+
 void Complex::fromString(const std::string& complexString) {
   // todo;
   std::string complexStr;
   std::cin >> complexStr;
-  int pos=complexStr.find('+');
+  std::string complexReal{""};
+  std::string complexImag{""};
+  int pos = complexStr.find('+');
+  if (pos == -1) pos = complexStr.find('-');
+  int pos_i = complexStr.find('i');
 }
 
 Complex Complex::operator+(const Complex& theComplex) {
