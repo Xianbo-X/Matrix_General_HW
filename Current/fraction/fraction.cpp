@@ -1,5 +1,6 @@
 #include "fraction.h"
 #include <cmath>
+#include <iostream>
 
 int Gcd(const int& a, const int& b) { return (b ? Gcd(b, a % b) : a); }
 
@@ -25,7 +26,7 @@ void fraction::simp() {
   this->_numerator /= factor;  //分数化简
 }
 
-fraction::fraction(const int& numerator = 0, const int& denominator = 1)
+fraction::fraction(const int& numerator, const int& denominator)
     : _numerator{numerator}, _denominator{denominator} {
   // Should We Simplify it?Or let it be?
   simp();
@@ -99,10 +100,12 @@ fraction fraction::operator/(const fraction& other) const
   return *this * reciprocal;
 }
 
-void fraction::operator+=(const fraction& other) { *this = *this + other; }
-void fraction::operator-=(const fraction& other) { *this = *this - other; }
-void fraction::operator*=(const fraction& other) { *this = *this * other; }
-void fraction::operator/=(const fraction& other) { *this = *this / other; }
+void fraction::operator+=(const fraction& other) {  //*this = (*this + other);
+  *this = this->operator+(other);
+}
+//void fraction::operator-=(const fraction& other) { *this = (*this - other); }
+//void fraction::operator*=(const fraction& other) { *this = (*this * other); }
+//void fraction::operator/=(const fraction& other) { *this = (*this / other); }
 
 bool fraction::operator==(const fraction& other) const {
   // exception both are illegal;
@@ -145,7 +148,7 @@ std::istream& operator>>(std::istream& in, fraction& frac)
 
 std::ostream& operator<<(std::ostream& out, const fraction& frac)
 // Normally you should output "a/b" without any space and LF
-// Sometims you may output a single integer (Why? Guess XD)
+// Sometimes you may output a single integer (Why? Guess XD)
 // If it is not a number (den = 0), output "NaN"
 
 {
