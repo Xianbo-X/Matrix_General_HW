@@ -6,8 +6,9 @@
       "command": "C:\\MyFiles\\Programs\\Academic\\Tools\\mingw64\\bin\\g++.exe",
       "args": [
         "-g",
-        "${fileDirname}\\*.cpp",
-        "${fileDirname}\\*.hpp",
+        //"${fileDirname}\\*.cpp",
+        //"${fileDirname}\\*.hpp",
+        "${file}",
         "-o",
         "${fileDirname}\\${fileBasenameNoExtension}.exe"
       ],

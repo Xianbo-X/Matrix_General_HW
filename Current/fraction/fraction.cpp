@@ -54,7 +54,7 @@ void fraction::operator=(const fraction& other) {
 
 fraction fraction::operator+(const fraction& other) const {
   // exception either denominator is 0, return 0/0;
-  if (!this->_denominator && !other._denominator) return fraction{0, 0};
+  if (!this->_denominator || !other._denominator) return fraction{0, 0};
 
   // regular addition for fractions.
   // 0 can be processed as well, don't need to special operation.
@@ -81,7 +81,7 @@ fraction fraction::operator-(const fraction& other) const {
 
 fraction fraction::operator*(const fraction& other) const {
   // exception
-  if (!this->_denominator && !other._denominator) return fraction{0, 0};
+  if (!this->_denominator || !other._denominator) return fraction{0, 0};
   // regular operation multiplication
 
   // Crossing simplify
@@ -134,7 +134,9 @@ void fraction::operator/=(const fraction& other) {
 bool fraction::operator==(const fraction& other) const {
   // exception both are illegal;
   if (!this->_denominator && !other._denominator) return true;
-
+  if ((!this->_denominator && other._denominator) ||
+      (this->_denominator && !other._denominator))
+    return false;
   // regular equality;
   return ((*this - other)._numerator == 0);
 }
