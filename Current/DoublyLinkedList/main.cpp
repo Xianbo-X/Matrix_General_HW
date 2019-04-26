@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include "List.hpp"
-
+#include "List.cpp"
 using std::cin;
 using std::cout;
 using std::endl;
@@ -121,11 +121,11 @@ int main() {
 
   if (true) {
     list li(a, n);
-    li.merge(li, li).merge(li, li).unique();
+       li.merge(li, li).merge(li, li).unique();
     outputList(li);
   }
 
   delete[] a;
 
   return 0;
-}
+}t    3 

@@ -27,7 +27,7 @@ list& list::operator=(const list& other) {
 list::~list() { clear(); }
 
 // Capacity
-bool list::empty(void) const { return !(head == NULL); }
+bool list::empty(void) const { return (head == NULL); }
 
 list::size_type list::size(void) const { return _size; }
 
@@ -77,14 +77,17 @@ void aux_insert_forward(list::listPointer& succ, const int& data) {
   list::listPointer q;
   q = new list::listNode(data, succ, succ->prev);
   succ->prev = q;
+  if (q->prev != NULL) q->prev->next = q;
 }
 void aux_insert_backward(list::listPointer& prev, const int& data) {
   list::listPointer q;
   q = new list::listNode(data, prev->next, prev);
   prev->next = q;
+  if (q->next != NULL) q->next->prev = q;
 }
 
 void list::insert(int position, const data_type& data) {
+  if (position < 0 || position > _size) return;
   if (position == 0) {
     if (head == NULL) {
       head = new listNode(data, NULL, NULL);
@@ -110,7 +113,9 @@ void removeNode_backward(list::listPointer& current) {
   list::listPointer p = current;
   current = p->next;
   if (current != NULL) current->prev = p->prev;
+
   if (p->prev != NULL) p->prev->next = current;
+
   delete p;
 }
 
@@ -145,23 +150,32 @@ void list::erase(int position) {
     // if (_size == 0) clear();
     return;
   }
-  removeNode_foreward(this->at(position - 1)->next);
+  removeNode_backward(this->at(position - 1)->next);
   _size--;
-  // if (_size == 0) clear();
+  // if (_size == 0) clear();Q
   return;
 }
 
 void list::clear(void) {
-  while (!empty()) pop_front();
+  while (!empty())   pop_front();
+  /*{
+    listPointer p = this->tail, q;
+    while (p != NULL) {
+      q = p;
+      p = p->prev;
+      delete q;
+      _size--;
+    }
+  }*/
   head = NULL;
   tail = NULL;
 }
 
 void list::split(int position, list* des1, list* dest2) {
-  /* useless, local variable
-   *if (des1 == NULL) des1 = new list;
-   *if (dest2 == NULL) dest2 == new list;
-   */
+  // clear des1
+  des1->clear();
+  dest2->clear();
+
   for (int i = 0; i < position; i++) {
     des1->push_back(this->at(i)->data);
   }
@@ -171,9 +185,11 @@ void list::split(int position, list* des1, list* dest2) {
 }
 
 list& list::merge(const list& src1, const list& src2) {
+  list temp1{src1};
+  list temp2{src2};
   clear();
-  *this = src1;
-  listPointer src2Ptr = src2.head;
+  *this = temp1;
+  listPointer src2Ptr = temp2.head;
 
   while (src2Ptr != NULL) {
     this->push_back(src2Ptr->data);
@@ -182,8 +198,8 @@ list& list::merge(const list& src1, const list& src2) {
   return *this;
 }
 list& list::remove_if(bool (*condition)(listPointer ptr)) {
+  listPointer ptr = this->head;
   int size = this->_size;
-
   for (int i = size - 1; i >= 0; i--) {
     if (condition(this->at(i))) erase(i);
   }
@@ -192,17 +208,24 @@ list& list::remove_if(bool (*condition)(listPointer ptr)) {
 }
 
 list& list::unique(void) {
-  listPointer p = this->head;
-  while (p != NULL) {
-    listPointer q = p->next;
-    while (q != NULL) {
-      if (q->data == p->data) {
-        removeNode_foreward(q);
-        continue;
-      }
-      q = q->next;
+  /*
+listPointer p = this->head;
+while (p != NULL) {
+  listPointer q = p->next;
+  while (q != NULL) {
+    if (q->data == p->data) {
+      removeNode_foreward(q);
     }
-    p = p->next;
+    q = q->next;
+  }
+  p = p->next;
+}*/
+  int size = this->_size;
+  for (int i = size - 1; i >= 0; i--) {
+    for (int j = i - 1; j >= 0; j--) {
+      if (i < this->_size)
+        if ((*this)[j] == (*this)[i]) erase(j);
+    }
   }
   return *this;
 }
