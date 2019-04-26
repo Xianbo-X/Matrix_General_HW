@@ -1,5 +1,5 @@
 #include "List.hpp"
-
+#include <sstream>
 list::list() : head{NULL}, tail{NULL}, _size{0} {}
 
 list::list(const data_type data[], int length)
@@ -13,9 +13,13 @@ list::list(const list& other) : head{NULL}, tail{NULL}, _size{0} {
 }
 
 list& list::operator=(const list& other) {
+  head = NULL;
+  tail = NULL;
+  _size = 0;
   listPointer otherPtr = other.head;
   while (otherPtr != NULL) {
     push_back(otherPtr->data);
+    otherPtr = otherPtr->next;
   }
   return *this;
 }
@@ -38,14 +42,17 @@ std::string list::toString(void) const {
   while (p != NULL) {
     if (p == head) {
       res = res + "<-";
-      continue;
     } else {
       res = res + "<->";
     }
-    res = res + static_cast<char>(p->data + 48);
+    std::stringstream ss;
+    ss.clear();
+    ss << p->data;
+    std::string num = "";
+    ss >> num;
+    res = res + num;
     if (p == tail) {
       res = res + "->NULL";
-      continue;
     }
     p = p->next;
   }
@@ -102,20 +109,21 @@ void list::insert(int position, const data_type& data) {
 void removeNode_backward(list::listPointer& current) {
   list::listPointer p = current;
   current = p->next;
-  current->prev = p->prev;
-  p->prev->next = current;
+  if (current != NULL) current->prev = p->prev;
+  if (p->prev != NULL) p->prev->next = current;
   delete p;
 }
 
 void removeNode_foreward(list::listPointer& current) {
   list::listPointer p = current;
   current = p->prev;
-  current->next = p->next;
-  p->next->prev = current;
+  if (current != NULL) current->next = p->next;
+  if (p->next != NULL) p->next->prev = current;
   delete p;
 }
 
 void list::erase(int position) {
+  if (position < 0 || position >= _size) return;
   if (head == NULL) return;
   if (position == 0) {
     removeNode_backward(head);
