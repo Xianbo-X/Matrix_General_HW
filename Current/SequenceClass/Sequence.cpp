@@ -18,11 +18,12 @@ bool Sequence::find(int value) {
   return true;
 }
 
-int &Sequence::at(int pos) { return a[pos]; }
+int &Sequence::at(int pos) { return a[pos+1]; }
 int Sequence::front() { return a[0]; }
 int Sequence::back() { return a[msize-1]; }
 void Sequence::insert(int value) { insert(msize-1, value); }
 void Sequence::insert(int pos, int value) {
+
   if (a == NULL) {
     a = new int[MAXSIZE];
     for (int i = 0; i < MAXSIZE; i++) a[i] = 0;
@@ -63,9 +64,9 @@ void Sequence::replace(int value1, int value2) {
 
 void Sequence::swap(Sequence &seq2) {
   for (int i = 0; i < MAXSIZE; i++) {
-    int temp = at(i);
-    at(i) = seq2.at(i);
-    seq2.at(i) = temp;
+    int temp = a[i];
+    a[i] = seq2.a[i];
+    seq2.a[i] = temp;
   }
   return;
 }
