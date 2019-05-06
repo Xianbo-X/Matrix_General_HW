@@ -1,6 +1,9 @@
 #include <iostream>
 #include <string>
+//#define DEBUG_
+#ifdef DEBUG_
 #include "List.cpp"
+#endif
 #include "List.hpp"
 using std::cin;
 using std::cout;
@@ -100,7 +103,6 @@ int main() {
     cout << endl;
     outputList(li2);
   }
-
   cout << endl;
 
   cout << endl;
@@ -118,7 +120,6 @@ int main() {
   }
 
   cout << endl;
-
   if (true) {
     list li(a, n);
     li.merge(li, li).merge(li, li).unique();

@@ -15,11 +15,8 @@ class list {
     node(data_type data = 0, node* next = NULL, node* prev = NULL)
         : data(data), next(next), prev(prev){};
   };
-
   typedef node listNode;
-
   typedef node* listPointer;
-
   typedef unsigned int size_type;
 
  private:
@@ -71,7 +68,7 @@ class list {
 
   // Modifiers
   void assign(const list&);
-  void assign(const data_type data[], int length);
+  void assign(const data_type datas[], int length);
   void push_front(const data_type&);
   void push_back(const data_type&);
   void pop_front(void);
@@ -82,10 +79,12 @@ class list {
   void clear(void);
 
   // Operations
+
   // split this list into to lists at the given position
   void split(int position, list* des1, list* dest2);
   // merge two list to this list from src1 and src2
   list& merge(const list& src1, const list& src2);
+
   // remove the elements who satisfy the condition
   list& remove_if(bool (*condition)(listPointer));
 
