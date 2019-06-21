@@ -40,7 +40,8 @@ std::string decode(std::string str) {
 
 int main() {
   std::string str;
-  while (std::cin >> str, str != "x") std::cout << decode(str) << std::endl;
+  while (std::cin >> str, str != "x") 
+  std::cout << decode(str) << std::endl;
 
   return 0;
 }
